@@ -34,9 +34,8 @@ def get_factors(interval = None, start = None, end = None):
     return get_data(['XLC', 'XLY', 'XLP', 'XLE', 'XLF', 'XLV', 'XLI', 'XLB', 'XLRE', 'XLK', 'XLU'])
 
 def regression_results(stocks, factors):
-    print(stocks.shape, factors.shape)
     stocks = stocks.dropna(axis = 1, how = "all")
-    
+
     stock_data_cutoff = stocks.reset_index().isna().any(axis = 1)[::-1].idxmax() - len(stocks) + 1
     factor_data_cutoff = factors.reset_index().isna().any(axis = 1)[::-1].idxmax() - len(factors) + 1
     data_cutoff = max(stock_data_cutoff, factor_data_cutoff)
@@ -47,8 +46,6 @@ def regression_results(stocks, factors):
     factors = factors.iloc[data_cutoff:].values
     factors = (factors[1:, :] - factors[:-1, :]) / (factors[:-1, :] + 1e-8)
     factors = np.hstack((np.ones((len(factors), 1)), factors))
-
-    print(stocks.shape, factors.shape)
 
     loadings = np.linalg.inv(factors.T @ factors) @ factors.T @ stocks
     resids = stocks - factors @ loadings
