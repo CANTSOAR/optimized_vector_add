@@ -53,4 +53,4 @@ def optimize_constrainted_vector_sum(vector_library, target, covariance_matrix, 
     final_vector = vector_sum.T @ vector_library
     final_variance = vector_sum.T @ vector_library @ covariance_matrix @ (vector_sum.T @ vector_library).T + vector_sum.T @ idio_matrix @ vector_sum / np.sum(abs(possible_weights))**2
 
-    return vector_sum / np.sum(abs(vector_sum)), final_vector, error, final_variance / np.sum(abs(vector_sum)) ** 2, c
+    return vector_sum / np.sum(abs(vector_sum)), final_vector, error, final_variance / np.sum(abs(vector_sum)) ** 2 * 252, c

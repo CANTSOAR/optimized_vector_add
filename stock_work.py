@@ -4,10 +4,11 @@ import requests
 import yfinance as yf
 
 def get_data(ticker_list, interval = None, start = None, end = None):
+    interval = interval if interval else "1d"
     if interval and start and end:
         data = yf.download(ticker_list, interval = interval, start = start, end = end, group_by = "ticker")
     else:
-        data = yf.download(ticker_list, period = "max", group_by = "ticker")
+        data = yf.download(ticker_list, interval = interval, period = "max", group_by = "ticker")
 
     closes = data.loc[:, (slice(None), "Close")]
     closes.columns = [ticker for ticker, _ in closes.columns]
@@ -31,7 +32,7 @@ def get_factors(interval = None, start = None, end = None):
     XLK: Technology
     XLU: Utilities
     """
-    return get_data(['XLC', 'XLY', 'XLP', 'XLE', 'XLF', 'XLV', 'XLI', 'XLB', 'XLRE', 'XLK', 'XLU'])
+    return get_data(['XLC', 'XLY', 'XLP', 'XLE', 'XLF', 'XLV', 'XLI', 'XLB', 'XLRE', 'XLK', 'XLU'], interval, start, end)
 
 def regression_results(stocks, factors):
     stocks = stocks.dropna(axis = 1, how = "all")
